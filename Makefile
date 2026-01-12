@@ -1,5 +1,21 @@
-compile:
-	arduino-cli compile /home/daddyagx/Arduino/marbella --fqbn=arduino:megaavr:uno2018 --libraries=/home/daddyagx/Documents/arduino-1.8.19-linuxaarch64/arduino-1.8.19/libraries,/home/daddyagx/Arduino/libraries
+PORT ?= /dev/ttyACM0
+MAKEFILE_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 
+OS := $(shell uname)
+MAC_LIBRARIES = /Users/$(USER)/Library/Arduino15/libraries,/Users/$(USER)/Documents/Arduino/libraries
+JETSON_LIBRARIES = /home/$(USER)/Documents/arduino-1.8.19-linuxaarch64/arduino-1.8.19/libraries,/home/$(USER)/Arduino/libraries 
+
+ifeq ($(OS),Darwin)
+	LIBRARIES = $(MAC_LIBRARIES)
+else ifeq ($(OS),Linux)
+	LIBRARIES = $(JETSON_LIBRARIES)
+endif
+
+compile:
+	arduino-cli compile ${MAKEFILE_DIR} --fqbn=arduino:megaavr:uno2018 --libraries=${LIBRARIES}
+
+# Upload the compiled code to the board.
+# Args:
+#   port: The serial port where the board is connected (e.g., /dev/ttyACM0, /dev/cu.usbmodem1102, etc).
 upload: compile
-	arduino-cli upload /home/daddyagx/Arduino/marbella --port=/dev/ttyACM0 --fqbn=arduino:megaavr:uno2018
+	arduino-cli upload ${MAKEFILE_DIR} --port=${PORT} --fqbn=arduino:megaavr:uno2018

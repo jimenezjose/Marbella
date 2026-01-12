@@ -11,6 +11,7 @@ else ifeq ($(OS),Linux)
 	LIBRARIES = $(JETSON_LIBRARIES)
 endif
 
+# Compile to code.
 compile:
 	arduino-cli compile ${MAKEFILE_DIR} --fqbn=arduino:megaavr:uno2018 --libraries=${LIBRARIES}
 

@@ -1,1 +1,1 @@
-# Estela is a hacked RC car platform for autonomous driving research.
+# Marbella is a hacked RC car platform for autonomous driving research.

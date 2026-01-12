@@ -11,12 +11,13 @@ else ifeq ($(OS),Linux)
 	LIBRARIES = $(JETSON_LIBRARIES)
 endif
 
-# Compile to code.
 compile:
 	arduino-cli compile ${MAKEFILE_DIR} --fqbn=arduino:megaavr:uno2018 --libraries=${LIBRARIES}
 
 # Upload the compiled code to the board.
 # Args:
 #   port: The serial port where the board is connected (e.g., /dev/ttyACM0, /dev/cu.usbmodem1102, etc).
+# Example:
+#   $make upload PORT=/dev/cu.usbmodem1102
 upload: compile
 	arduino-cli upload ${MAKEFILE_DIR} --port=${PORT} --fqbn=arduino:megaavr:uno2018

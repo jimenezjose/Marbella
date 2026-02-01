@@ -2,14 +2,16 @@
 
 #include <Arduino.h>
 #include <VescUart.h>
+#include <SoftwareSerial.h>
 
 #include "signals/low_pass_filter.hpp"
 #include "control/steering_motor.hpp"
 
 const int knobPin = A0;
-int motorPin = 10;
+int motorPin = 5;
 
-SteeringMotor steeringMotor(9);
+// SteeringMotor steeringMotor(9);
+SoftwareSerial bluetoothSerial(9, 10); // RX (interupt pin), TX
 
 VescUart UART;
 float current = 1.0; 
@@ -24,20 +26,24 @@ void setup() {
 
   // vesc setup
   Serial.begin(115200);
-  // Serial.println("Hello World");
   while (!Serial) {;}
   UART.setSerialPort(&Serial);
+
+  // bluetooth setup
+  bluetoothSerial.begin(9600);
 }
 
 void loop() {
   // read knob value
   int knobValue = analogRead(knobPin);
-  // Serial.print("knobValue: ");
-  // Serial.println(knobValue);
+  Serial.print("knobValue: ");
+  Serial.println(knobValue);
+  bluetoothSerial.print("knobValue: ");
+  bluetoothSerial.println(knobValue);
 
   // Throttle
-  int currentRequest = map(knobValue, 0, 1023, 0, 7);
-  UART.setCurrent(currentRequest);
+  // int currentRequest = map(knobValue, 0, 1023, 0, 7);
+  // UART.setCurrent(currentRequest);
 
   // if ( UART.getVescValues() ) {
   //   Serial.println(UART.data.rpm);
